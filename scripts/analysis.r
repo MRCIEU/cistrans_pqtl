@@ -1,6 +1,7 @@
 library(TwoSampleMR)
 library(dplyr)
 library(ggplot2)
+library(ggrepel)
 library(here)
 
 ap <- tribble(
@@ -76,7 +77,8 @@ ap$code <- paste(ap$protein, "->", ap$trait)
 inner_join(res, ap, by=c("exposure"="protein")) %>%
 ggplot(., aes(x=b, y=instrument)) +
     geom_vline(xintercept=0, linetype="dotted") +
-    geom_point(aes(colour=instrument)) +
+    geom_point(size=3, aes(colour=instrument)) +
+    geom_label_repel(size=2, aes(label=nsnp)) +
     geom_errorbarh(aes(colour=instrument, xmin=b-se*1.96, xmax=b+se*1.96), height=0) +
     facet_wrap(~ code, scale="free_x") +
     scale_colour_brewer(type="qual") +
